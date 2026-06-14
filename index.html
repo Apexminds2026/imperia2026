@@ -52,7 +52,7 @@
             letter-spacing: 1px;
         }
         
-        /* Full Widescreen Cinematic Video Section */
+        /* Full Widescreen Cinematic Video Section with Interactive Overlay */
         .video-section {
             width: 100%;
             margin-bottom: 30px;
@@ -61,6 +61,7 @@
             overflow: hidden;
             border: 1px solid #334155;
             background-color: #000;
+            position: relative;
         }
         .video-section video {
             width: 100%;
@@ -68,6 +69,31 @@
             max-height: 70vh;
             object-fit: cover;
             display: block;
+        }
+        
+        /* Custom Unmute Activation Button Box */
+        .audio-unmute-overlay {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(180, 83, 9, 0.85);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            border: 1px solid #f59e0b;
+            transition: 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        .audio-unmute-overlay:hover {
+            background: rgba(180, 83, 9, 1);
+            transform: scale(1.05);
         }
         
         .grid {
@@ -180,9 +206,12 @@
     </header>
 
     <div class="container">
-        <!-- Expanded Widescreen Video Component -->
+        <!-- Expanded Widescreen Video Component with Sound Controls -->
         <div class="video-section">
-            <video autoplay muted loop playsinline controls preload="auto">
+            <div id="audioStatusBtn" class="audio-unmute-overlay" onclick="togglePlatformAudio()">
+                <span>🔊 Tap to Turn On Sound</span>
+            </div>
+            <video id="cinematicPlayer" autoplay muted loop playsinline controls preload="auto">
                 <source src="IMPERIA.mp4" type="video/mp4">
                 Your system does not support native web video rendering.
             </video>
@@ -279,6 +308,23 @@
                 waText: "Please send the full unlocked Project Brochure"
             }
         };
+
+        function togglePlatformAudio() {
+            const player = document.getElementById('cinematicPlayer');
+            const btn = document.getElementById('audioStatusBtn');
+            
+            if (player.muted) {
+                player.muted = false;
+                btn.innerHTML = "<span>🔇 Mute Sound</span>";
+                btn.style.background = "#334155";
+                btn.style.borderColor = "#475569";
+            } else {
+                player.muted = true;
+                btn.innerHTML = "<span>🔊 Tap to Turn On Sound</span>";
+                btn.style.background = "rgba(180, 83, 9, 0.85)";
+                btn.style.borderColor = "#f59e0b";
+            }
+        }
 
         function openPreview(docKey) {
             const data = previewData[docKey];
